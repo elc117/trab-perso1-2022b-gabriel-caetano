@@ -1,0 +1,764 @@
+_type: export
+__export_format: 4
+__export_date: 2021-10-11T14:57:03.630Z
+__export_source: insomnia.desktop.app:v2021.4.0
+resources:
+  - _id: req_bf5c9d26ca8849159cdba571a21062d6
+    parentId: fld_2d1eee762d524f51922736313cbbdbbc
+    modified: 1633963948635
+    created: 1633957710420
+    url: localhost:3333/admin/admins/2
+    name: AdminController.update
+    description: >
+      Utilizado para atualizar as informações do admin. Espera-se o id do admin
+      em questão nos params da rota.
+
+
+
+      **Corpo esperado:**
+
+
+      {
+
+
+      "name": "Novo nome do admin" (OPCIONAL)
+
+
+      "sector": "Novo setor do admin" (OPCIONAL)
+
+
+      name: string, sector: string
+
+
+      }
+
+
+      **Retorno esperado:**
+
+
+      {
+
+        "user_id": ID do user,
+       
+       "name": "Nome do admin atualizado",
+       
+       "sector": "Setor do admin atualizado",
+       
+       "created_at": ...,
+       
+       "updated_at": ...
+
+      }
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"name": "Fulano de Tal",
+        	"sector": "Tecnologia de Informacao"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_883681f2c977462c8a8863020e79c9dd
+    authentication:
+      type: bearer
+      token: NTg.G2olnHQ2jofuxZfPMp6-vtEDG9GkgnjznrSYF_baGYLRS9WUcAtzlgQFeqSD
+    metaSortKey: -1633957710471
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_2d1eee762d524f51922736313cbbdbbc
+    parentId: fld_82a4cea919e146b8b5bf871ba84c41d9
+    modified: 1633953558355
+    created: 1633953558355
+    name: Admin
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1633953558355
+    _type: request_group
+  - _id: fld_82a4cea919e146b8b5bf871ba84c41d9
+    parentId: wrk_837275a1146c444ebab0175dca49e994
+    modified: 1633950366242
+    created: 1633950366242
+    name: Admin routes
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1633950366242
+    _type: request_group
+  - _id: wrk_837275a1146c444ebab0175dca49e994
+    parentId: null
+    modified: 1623255751058
+    created: 1623255751058
+    name: Insomnia
+    description: ""
+    scope: collection
+    _type: workspace
+  - _id: req_6e604b9521b540b6901e316d918c9a20
+    parentId: fld_2d1eee762d524f51922736313cbbdbbc
+    modified: 1633963460645
+    created: 1633957450684
+    url: localhost:3333/admin/admins
+    name: AdminController.index
+    description: |-
+      Utilizado para recuperar os dados básicos de admin (de validação ou não).
+
+
+      **Corpo esperado:**
+
+      Nenhum, ou:
+
+      {
+
+      "validation": true (OPCIONAL)
+
+      }
+
+      validation: booleano, true ou false (OPCIONAL)
+
+      **Retorno esperado:**
+
+      _Caso validation=true_
+
+      {
+
+      name: "nome do admin",
+
+      profile_picture: dados da foto de perfil do admin
+
+      }
+
+
+      _Se não (caso validation=false ou sem nenhum corpo)_
+
+      {
+
+      profile_picture: dados da foto de perfil do admin,
+
+      email: e-mail do admin
+
+      }
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication:
+      type: bearer
+      token: NTg.G2olnHQ2jofuxZfPMp6-vtEDG9GkgnjznrSYF_baGYLRS9WUcAtzlgQFeqSD
+    metaSortKey: -1633957450735
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_258b3bca4d6e479a85a5ef6206332753
+    parentId: fld_1f318f2353b2425cb949378852a0c395
+    modified: 1633963848692
+    created: 1633956211732
+    url: localhost:3333/admin/users/2/change-password
+    name: UserController.updateUserPassword
+    description: >-
+      Utilizado por um ADMIN do sistema para trocar a senha de um usuário.
+      Espera-se o id do usuário em questão nos params da rota.
+
+
+
+      **Corpo esperado:**
+
+
+      {
+
+        "oldPassword": "senhaAntiga", (OPCIONAL)
+        
+        "newPassword": "novaSenha"
+
+      }
+
+
+      oldPassword: Senha antiga do usuário. OPCIONAL nesse caso (admin consegue modificar a senha do usuário sabendo ou não a senha antiga). string
+
+
+      newPassword: Nova senha do usuário. string required confirmed minLength:6
+
+
+      **Retorno esperado:**
+
+
+      Nenhum.
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"oldPassword": "123123",
+        	"newPassword": "abacadabra"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_5da11384408d4917ad467981751e5a36
+    authentication:
+      type: bearer
+      token: NTg.G2olnHQ2jofuxZfPMp6-vtEDG9GkgnjznrSYF_baGYLRS9WUcAtzlgQFeqSD
+    metaSortKey: -1633955479856.5
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_1f318f2353b2425cb949378852a0c395
+    parentId: fld_82a4cea919e146b8b5bf871ba84c41d9
+    modified: 1633952743157
+    created: 1633952743157
+    name: User
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1633952743157
+    _type: request_group
+  - _id: req_3d52d394768f42109dfeb26ddbfd9615
+    parentId: fld_1f318f2353b2425cb949378852a0c395
+    modified: 1633962345396
+    created: 1633954747981
+    url: localhost:3333/admin/users/2/profile-pictures
+    name: UserController.getUserProfilePicture
+    description: >-
+      Utilizado por um ADMIN do sistema para recuperar os dados da foto de
+      perfil de um usuário. Espera-se o id do usuário em questão nos params da
+      rota.
+
+
+
+      **Corpo esperado:**
+
+
+      Nenhum.
+
+
+      **Retorno esperado:**
+
+
+      {
+
+        "id": id da imagem na tabela profile_pictures,
+        
+        "user_id": id do usuário a que a imagem pertence,
+        
+        "url": URL da imagem,
+        
+        "key": caminho para a imagem,
+        
+        "created_at": ...,
+        
+        "updated_at": ...
+
+      }
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication:
+      type: bearer
+      token: NTg.G2olnHQ2jofuxZfPMp6-vtEDG9GkgnjznrSYF_baGYLRS9WUcAtzlgQFeqSD
+    metaSortKey: -1633954747981
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_9fd9e19427c94e14b28f56ba25afdec6
+    parentId: fld_1f318f2353b2425cb949378852a0c395
+    modified: 1633962455833
+    created: 1633954629900
+    url: localhost:3333/admin/users/2/profile-pictures
+    name: UserController.storeUserProfilePicture
+    description: >
+      Utilizado por um ADMIN do sistema para armazenar (criar ou substituir) a
+      imagem de perfil de um usuário na AWS e os manter os dados de
+      identificação (id da imagem, id do usuário, url gerado, key e timestamps)
+      no banco de dados. Espera-se o id do usuário em questão nos params da
+      rota.
+
+
+
+      **Corpo esperado:**
+
+
+      Multipart com o **name "image" (IMPORTANTE)** e o arquivo da imagem em questão anexado junto a request.
+
+
+      imagem: tamanho máximo de 2mb, extensões .jpg, .png ou .gif
+
+
+      **Retorno esperado:**
+
+
+      Nenhum.
+    method: POST
+    body:
+      mimeType: multipart/form-data
+      params: []
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: multipart/form-data
+        id: pair_d806b18f7e5f4fd4a95f5fad28e25be1
+    authentication: {}
+    metaSortKey: -1633954629900
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_e256317e10534463b31782ba2a25a5a0
+    parentId: fld_ea1f79237dd7497a9afba4a722283b96
+    modified: 1633962422851
+    created: 1633903963277
+    url: localhost:3333/users/2/profile-pictures
+    name: ProfilePictureController.store
+    description: >
+      Utilizado para armazenar (criar ou substituir) a imagem de perfil do
+      usuário na AWS e os manter os dados de identificação (id da imagem, id do
+      usuário, url gerado, key e timestamps) no banco de dados. Espera-se o id
+      do usuário em questão nos params da rota.
+
+
+
+      **Corpo esperado:**
+
+
+      Multipart com o **name "image" (IMPORTANTE)** e o arquivo da imagem em questão anexado junto a request.
+
+
+      imagem: tamanho máximo de 2mb, extensões .jpg, .png ou .gif
+
+
+      **Retorno esperado:**
+
+
+      Nenhum.
+    method: POST
+    body:
+      mimeType: multipart/form-data
+      params:
+        - id: pair_f27bbf5f76be43269301488b1956d699
+          name: image
+          value: ""
+          description: ""
+          type: file
+          fileName: /home/gabriel/Área de Trabalho/FOTODEPERFIL.jpg
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: multipart/form-data
+        id: pair_02e9af33f05e43b2a94e6cd740749a41
+    authentication:
+      type: bearer
+      token: NjI.6yt56EVS4JWx5FaRcTgku02-6Zv3mMZC3IBNT2scXsD32bAdfEF66QXPrW7i
+    metaSortKey: -1633904565463
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_ea1f79237dd7497a9afba4a722283b96
+    parentId: fld_18284d6174ba46eeb11f13f5522fa297
+    modified: 1633950301177
+    created: 1633950301177
+    name: Profile Picture
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1633950301177
+    _type: request_group
+  - _id: fld_18284d6174ba46eeb11f13f5522fa297
+    parentId: wrk_837275a1146c444ebab0175dca49e994
+    modified: 1633950114600
+    created: 1633950114600
+    name: General routes
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1633950114600
+    _type: request_group
+  - _id: req_c8ea424ad9bf42efb30e5dc5c5c57db9
+    parentId: fld_ea1f79237dd7497a9afba4a722283b96
+    modified: 1633961294525
+    created: 1633904565363
+    url: localhost:3333/users/2/profile-pictures
+    name: ProfilePictureController.index
+    description: >-
+      Utilizado para recuperar os dados da foto de perfil do usuário. Espera-se
+      o id do usuário em questão nos params da rota.
+
+
+
+      **Corpo esperado:**
+
+
+      Nenhum.
+
+
+      **Retorno esperado:**
+
+
+      {
+
+        "id": id da imagem na tabela profile_pictures,
+        
+        "user_id": id do usuário a que a imagem pertence,
+        
+        "url": URL da imagem,
+        
+        "key": caminho para a imagem,
+        
+        "created_at": ...,
+        
+        "updated_at": ...
+
+      }
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication:
+      type: bearer
+      token: NTg.G2olnHQ2jofuxZfPMp6-vtEDG9GkgnjznrSYF_baGYLRS9WUcAtzlgQFeqSD
+    metaSortKey: -1633904565413
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_69f30e10e4cb4949af9bea061bbbf12d
+    parentId: fld_78ac0f60ef2f4963b45443c83dc6a3c2
+    modified: 1633961477130
+    created: 1633902806398
+    url: localhost:3333/users/2/change-password
+    name: ChangePasswordController.update
+    description: >-
+      Utilizado pelo usuário para trocar a senha (ele sabe a senha antiga e quer
+      substituí-la por outra). Espera-se o id do usuário em questão nos params
+      da rota.
+
+
+
+      **Corpo esperado:**
+
+
+      {
+        "oldPassword": "senhaAntiga",
+        "newPassword": "novaSenha"
+      }
+
+
+      oldPassword: Senha antiga do usuário. string required
+
+
+      newPassword: Nova senha do usuário. string required confirmed minLength:6
+
+
+      **Retorno esperado:**
+
+
+      Nenhum.
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"oldPassword": "abacadabra",
+        	"newPassword": "123123"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_92330d085ff7415db75ead3ce4428859
+    authentication:
+      type: bearer
+      token: NjE.5NufI1bUmKs4f6qnDprzOucCJBB9VdmN1Nk1QoDS6VgjpPRHG2Ht12DUVdhO
+    metaSortKey: -1633899099083
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_78ac0f60ef2f4963b45443c83dc6a3c2
+    parentId: fld_18284d6174ba46eeb11f13f5522fa297
+    modified: 1633950228361
+    created: 1633950228361
+    name: Forgot/Change Password
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1633950228361
+    _type: request_group
+  - _id: req_3721225a440b45d58bdb8eb61345ecc8
+    parentId: fld_78ac0f60ef2f4963b45443c83dc6a3c2
+    modified: 1633960212853
+    created: 1633900108207
+    url: localhost:3333/users/forgot-password/be6b14f35906127fd2ac/gcmazzardo@inf.ufsm.br
+    name: ForgotPasswordController.update
+    description: >-
+      Utilizado pelo usuário para trocar a senha com base no token, gerado
+      anteriormente para a recuperação da senha, no método
+      ForgotPasswordController.store. Espera-se nos params da rota o token
+      obtido (o usuário recebe esse token por e-mail) e o e-mail do usuário em
+      questão. Ps.: um token de recuperação tem validade de 48h.
+
+
+      **Corpo esperado:**
+
+
+      {
+        "newPassword": "novaSenha"
+      }
+
+
+      newPassword: Nova senha do usuário. string required confirmed minLength:6
+
+
+      **Retorno esperado:**
+
+
+      O user, com exceção da senha.
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"newPassword":"abacadabra"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_785404359acf4c8c8d8dfe16b8926477
+    authentication: {}
+    metaSortKey: -1633899099033
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_4895225b63144c959ce2bf055693faad
+    parentId: fld_78ac0f60ef2f4963b45443c83dc6a3c2
+    modified: 1633963918866
+    created: 1633899098983
+    url: localhost:3333/users/forgot-password
+    name: ForgotPasswordController.store
+    description: >-
+      Utilizado pelo usuário para requisitar a recuperação de senha (esqueceu
+      senha). Gera um token, armazenado no campo remember_me_token da tabela
+      users, utilizado para a recuperação.
+
+
+      **Corpo esperado:**
+
+
+      {
+        "email": "emailusuario@exemplo.com",
+      }
+
+
+      email: string required email
+
+
+      **Retorno esperado:**
+
+
+      Nenhum.
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"email": "gcmazzardo@inf.ufsm.br"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_b67298f3e7de4c7e90ac1f0ed8b8f846
+    authentication: {}
+    metaSortKey: -1633899098983
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_2b4cb3995dff4a0aa1a5250ff920580e
+    parentId: fld_ea49d52b016d491783c0634cddae4cde
+    modified: 1633959570782
+    created: 1633894868434
+    url: localhost:3333/sessions/logout
+    name: SessionsController.destroy
+    description: >
+      Utilizado para remover a sessão (logout) do usuário. Remove o token do
+      usuário (passado na rota) da tabela api_tokens.
+
+
+      **Corpo esperado:**
+
+
+      Nenhum, apenas o token válido da sessão do usuário, gerado no método SessionsController.create.
+
+
+      **Retorno esperado:**
+
+
+      Nenhum.
+    method: POST
+    body:
+      mimeType: application/json
+      text: ""
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_87e19a259b3b47869356298c66d8a6ab
+    authentication:
+      type: bearer
+      token: NTg.G2olnHQ2jofuxZfPMp6-vtEDG9GkgnjznrSYF_baGYLRS9WUcAtzlgQFeqSD
+    metaSortKey: -1633950147028
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_ea49d52b016d491783c0634cddae4cde
+    parentId: fld_18284d6174ba46eeb11f13f5522fa297
+    modified: 1633950147128
+    created: 1633950147128
+    name: Session
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1633950147128
+    _type: request_group
+  - _id: req_cbcb2410322d463aabbaba7c58de95b1
+    parentId: fld_ea49d52b016d491783c0634cddae4cde
+    modified: 1633962743120
+    created: 1633894800131
+    url: localhost:3333/sessions
+    name: SessionsController.create
+    description: >
+      Utilizado para iniciar a sessão (login) de usuário
+
+
+      **Corpo esperado:**
+
+
+      {
+        "email": "email@teste.com",
+        "senha": "senha_tamanho_minimo_6_digitos"
+      }
+
+
+      email: string required email
+
+
+      senha: string required confirmed minLength:6
+
+
+      **Retorno esperado:**
+
+
+      "auth", contendo o "token" gerado e o "type" do token
+
+
+      "roles", contendo o array com todas as roles (papeis) que o usuário desempenha no sistema
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"email": "gcmazzardo@inf.ufsm.br",
+        	"password": "abacadabra"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_7049458b4b89498c866d28d0af83e570
+    authentication: {}
+    metaSortKey: -1633950146978
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: false
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: env_0a9e4b3257875c8a189f1fa0c17ab7b001eb15cb
+    parentId: wrk_837275a1146c444ebab0175dca49e994
+    modified: 1631837966230
+    created: 1623255751127
+    name: Base Environment
+    data:
+      base_url: http://localhost:3333
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTYzMTgzNjg1OX0.fwTJr3KJyVvgbP2-4-iV3T7rRX6Juumh3Ry7iJxRERo
+    dataPropertyOrder:
+      "&":
+        - base_url
+        - token
+    color: null
+    isPrivate: false
+    metaSortKey: 1623255751127
+    _type: environment
+  - _id: jar_0a9e4b3257875c8a189f1fa0c17ab7b001eb15cb
+    parentId: wrk_837275a1146c444ebab0175dca49e994
+    modified: 1623255751130
+    created: 1623255751130
+    name: Default Jar
+    cookies: []
+    _type: cookie_jar
+  - _id: spc_2fbfda76d07a4fffb96567840df9b0ed
+    parentId: wrk_837275a1146c444ebab0175dca49e994
+    modified: 1623255751060
+    created: 1623255751060
+    fileName: Insomnia
+    contents: ""
+    contentType: yaml
+    _type: api_spec
