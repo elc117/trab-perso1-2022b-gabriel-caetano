@@ -16,7 +16,6 @@ export default class ProfilePictures extends BaseSchema {
         .notNullable()
       table.string('url').notNullable()
       table.string('key').notNullable()
-
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

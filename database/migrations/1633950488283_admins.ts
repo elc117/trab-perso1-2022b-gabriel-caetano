@@ -16,8 +16,7 @@ export default class Admins extends BaseSchema {
         .unique()
         .notNullable()
       table.string('name').notNullable()
-      table.string('sector')
-
+      table.string('position')
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })
