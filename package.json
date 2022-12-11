@@ -13,6 +13,7 @@
   "devDependencies": {
     "@adonisjs/assembler": "^5.0.0",
     "@types/jsdom": "^16.2.13",
+    "@types/node-fetch": "^2.6.2",
     "@types/supertest": "^2.0.11",
     "adonis-preset-ts": "^2.1.0",
     "eslint": "^7.32.0",
@@ -42,6 +43,7 @@
     "aws-sdk": "^2.1002.0",
     "luxon": "^2.0.2",
     "mysql": "^2.18.1",
+    "node-fetch": "2",
     "phc-argon2": "^1.1.2",
     "phc-bcrypt": "^1.0.7",
     "proxy-addr": "^2.0.7",
