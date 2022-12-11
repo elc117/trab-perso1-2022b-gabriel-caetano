@@ -6,9 +6,14 @@ export default class RoleSeeder extends BaseSeeder {
     const trx = await Database.transaction()
     try {
       await trx.table('roles').multiInsert([
-        { slug: 'admin', description: 'manage administrator privileges' },
-        { slug: 'company', description: 'manage company privileges' },
-        { slug: 'collaborator', description: 'manage collaborator privileges' },
+        {
+          slug: 'admin',
+          description: 'manage customers access and support',
+        },
+        {
+          slug: 'customer',
+          description: 'has access to system features',
+        },
       ])
       await trx.commit()
     } catch (error) {

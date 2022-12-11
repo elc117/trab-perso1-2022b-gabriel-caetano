@@ -8,8 +8,6 @@ export default class Roles extends BaseSchema {
       table.increments('id')
       table.string('slug').notNullable().unique()
       table.text('description').nullable()
-      table.timestamp('created_at', { useTz: true })
-      table.timestamp('updated_at', { useTz: true })
     })
   }
 
