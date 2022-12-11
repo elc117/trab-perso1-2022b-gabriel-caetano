@@ -1,22 +1,25 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class Tournaments extends BaseSchema {
-  protected tableName = 'tournaments'
+export default class Customers extends BaseSchema {
+  protected tableName = 'customers'
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
       table
-        .integer('sport_id')
+        .integer('user_id')
         .unsigned()
+        .primary()
         .references('id')
-        .inTable('sports')
+        .inTable('users')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
+        .unique()
         .notNullable()
-      table.integer('sofascore_id').notNullable()
       table.string('name').notNullable()
-      table.string('slug').notNullable()
+      table.string('verification_code')
+      table.boolean('verified').notNullable().defaultTo(false)
+      // check customer info
+      table.timestamp('last_login', { useTz: true })
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })
