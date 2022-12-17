@@ -7,7 +7,7 @@ export default class SessionUserValidator {
   public schema = schema.create({
     //fields are required by default when '.optional' is not included
     email: schema.string({}, [rules.email()]),
-    password: schema.string(),
+    password: schema.string({}, [rules.minLength(6)]),
   })
 
   public messages = {

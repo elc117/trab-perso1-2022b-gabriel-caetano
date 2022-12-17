@@ -6,9 +6,9 @@ export default class Sports extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.integer('sofascore_id')
-      table.string('name')
-      table.string('slug')
+      table.integer('sofascore_id').notNullable()
+      table.string('name').notNullable()
+      table.string('slug').notNullable()
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

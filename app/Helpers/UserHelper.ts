@@ -8,6 +8,7 @@ import Database from '@ioc:Adonis/Lucid/Database'
 import User from 'App/Models/User'
 import ProfilePicture from 'App/Models/ProfilePicture'
 import UserPasswordChangeValidator from 'App/Validators/UserPasswordChangeValidator'
+import Customer from 'App/Models/Customer'
 
 class UserHelper {
   public async storeUserProfilePicture(request, response, user: User) {
@@ -41,6 +42,20 @@ class UserHelper {
           .to(user.email)
           .subject('Portal da Inovação - Recuperação de senha')
           .htmlView('emails.recover-password', { user })
+          .htmlView('email.recover-password-text', { token })
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  public async verifyEmail(user: User, customer: Customer, token: string) {
+    try {
+      await Mail.send((message) => {
+        message
+          .to(user.email)
+          .subject('A=CO - Verificação de email')
+          .htmlView('emails.welcome', { customer })
           .htmlView('email.recover-password-text', { token })
       })
     } catch (e) {

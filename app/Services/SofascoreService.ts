@@ -25,18 +25,19 @@ export default class SofascoreService {
   public async getUniqueTournaments() {
     const url = `${this.baseUrl}/config/unique-tournaments/BR`
     const data = await fetch(url)
+    console.log(data)
+
     const jsonData = JSON.parse(await data.text())
     return jsonData
   }
 
+  public async listSports() {
+    const url = this.baseUrl + '/sport/-10800/event-count'
+    return (await fetch(url)).text()
+  }
   // teste
   public async webConfig() {
     const url = `${this.baseUrl}/config/unique-tournaments/BR`
-    return (await fetch(url)).text()
-  }
-
-  public async listSports() {
-    const url = this.baseUrl + '/sport/-10800/event-count'
     return (await fetch(url)).text()
   }
 

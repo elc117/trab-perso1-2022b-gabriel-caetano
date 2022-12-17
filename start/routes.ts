@@ -7,6 +7,7 @@ Route.get('/', async () => {
 Route.get('/api', 'DataServiceController.index')
 
 /* Session routes */
+Route.post('register', 'SessionsController.register')
 Route.post('sessions', 'SessionsController.create')
 Route.post('/sessions/validate', 'SessionController.validate')
 
