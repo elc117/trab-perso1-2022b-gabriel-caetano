@@ -60,19 +60,4 @@ export default class SofascoreService {
     const url = this.baseUrl + '/event/newly-added-events'
     return (await fetch(url)).text()
   }
-
-  public async football() {
-    const url = this.baseUrl + '/odds/1/featured-events/football'
-    return (await fetch(url)).text()
-  }
-
-  public async footballConf() {
-    const url = this.baseUrl + '/config/unique-tournaments/BR/football'
-    return (await fetch(url)).text()
-  }
-
-  public async featured() {
-    const url = this.baseUrl + '/event/10919691/odds/1/featured'
-    return (await fetch(url)).text()
-  }
 }

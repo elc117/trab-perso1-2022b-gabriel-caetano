@@ -4,8 +4,6 @@ Route.get('/', async () => {
   return { hello: 'world' }
 })
 
-Route.get('/api', 'DataServiceController.index')
-
 /* Session routes */
 Route.post('register', 'SessionsController.register')
 Route.post('sessions', 'SessionsController.create')
