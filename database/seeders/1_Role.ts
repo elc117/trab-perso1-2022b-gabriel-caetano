@@ -15,6 +15,7 @@ export default class RoleSeeder extends BaseSeeder {
           description: 'has access to system features',
         },
       ])
+
       await trx.commit()
     } catch (error) {
       await trx.rollback()

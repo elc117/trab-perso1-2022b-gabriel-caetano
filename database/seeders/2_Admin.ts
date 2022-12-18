@@ -3,6 +3,7 @@ import User from 'App/Models/User'
 import Env from '@ioc:Adonis/Core/Env'
 import Admin from 'App/Models/Admin'
 import Database from '@ioc:Adonis/Lucid/Database'
+import Role from 'App/Models/Role'
 export default class UserSeeder extends BaseSeeder {
   public async run() {
     const trx = await Database.transaction()
@@ -23,6 +24,11 @@ export default class UserSeeder extends BaseSeeder {
         },
         trx
       )
+      const role = await Role.findByOrFail('slug', 'admin')
+      await trx.table('role_users').insert({
+        roleId: role.id,
+        userId: user.id,
+      })
     } catch (e) {
       console.log(e)
     }
