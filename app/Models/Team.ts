@@ -1,22 +1,35 @@
 import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, BelongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import Country from './Country'
 import Sport from './Sport'
 
-export default class Tournament extends BaseModel {
+export default class Team extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
   @column()
-  public sportId: number
+  public apiFootballId: number
 
   @column()
-  public sofascoreId: number
+  public countryId: number
+
+  @column()
+  public sportId: number
 
   @column()
   public name: string
 
   @column()
   public slug: string
+
+  @column()
+  public code: string
+
+  @column()
+  public founded: number
+
+  @column()
+  public logoUrl: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -26,4 +39,7 @@ export default class Tournament extends BaseModel {
 
   @belongsTo(() => Sport)
   public sport: BelongsTo<typeof Sport>
+
+  @belongsTo(() => Country)
+  public country: BelongsTo<typeof Country>
 }

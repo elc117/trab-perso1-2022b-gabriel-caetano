@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import Tournament from './Tournament'
+import League from './League'
 
 export default class Sport extends BaseModel {
   @column({ isPrimary: true })
@@ -21,6 +21,6 @@ export default class Sport extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @hasMany(() => Tournament)
-  public tournaments: HasMany<typeof Tournament>
+  @hasMany(() => League)
+  public leagues: HasMany<typeof League>
 }

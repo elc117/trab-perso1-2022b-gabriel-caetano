@@ -2,14 +2,15 @@ import fetch from 'node-fetch'
 import Env from '@ioc:Adonis/Core/Env'
 
 class ApiFootball {
-  private baseUrl = 'https://api-football-v1.p.rapidapi.com/v3/'
+  private apiHost = Env.get('API_FOOTBALL_HOST')
+  private baseUrl = `https://${this.apiHost}/v3`
 
   private async get(subUrl: string) {
     const options = {
       method: 'GET',
       headers: {
         'X-RapidAPI-Key': Env.get('API_FOOTBALL_KEY'),
-        'X-RapidAPI-Host': Env.get('API_FOOTBALL_HOST'),
+        'X-RapidAPI-Host': this.apiHost,
       },
     }
     const data = await fetch(this.baseUrl + subUrl, options)
@@ -27,6 +28,10 @@ class ApiFootball {
 
   public async listLeagues() {
     return await this.get('/leagues')
+  }
+
+  public async listTeamsByLeagueAndSeason(league: number, season: number) {
+    return await this.get(`/teams?league=${league}&season=${season}`)
   }
 }
 export default new ApiFootball()
