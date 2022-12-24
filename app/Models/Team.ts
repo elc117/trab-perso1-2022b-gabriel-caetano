@@ -1,7 +1,15 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, BelongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  belongsTo,
+  BelongsTo,
+  column,
+  ManyToMany,
+  manyToMany,
+} from '@ioc:Adonis/Lucid/Orm'
 import Country from './Country'
 import Sport from './Sport'
+import Season from './Season'
 
 export default class Team extends BaseModel {
   @column({ isPrimary: true })
@@ -42,4 +50,7 @@ export default class Team extends BaseModel {
 
   @belongsTo(() => Country)
   public country: BelongsTo<typeof Country>
+
+  @manyToMany(() => Season)
+  public seasons: ManyToMany<typeof Season>
 }
