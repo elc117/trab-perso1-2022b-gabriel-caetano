@@ -42,6 +42,7 @@ export default class SessionsController {
       await user.save()
       return { auth: token, roles: roles }
     } catch (e) {
+      console.log(e)
       return response.unauthorized({ message: 'Falha na autenticação.' })
     }
   }
