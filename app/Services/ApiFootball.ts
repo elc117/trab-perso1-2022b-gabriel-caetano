@@ -51,5 +51,9 @@ class ApiFootball {
   public async getFixturesByLeagueAndSeason(leagueId: number, season: number) {
     return await this.get(`/fixtures?league=${leagueId}&season=${season}`)
   }
+
+  public async getStatsByFixtureId(fixtureId: number) {
+    return await this.get(`/fixtures/statistics?fixture=${fixtureId}`)
+  }
 }
 export default new ApiFootball()
