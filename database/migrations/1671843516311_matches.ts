@@ -6,6 +6,7 @@ export default class Matches extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
+      table.integer('fixture_id').notNullable()
       table
         .integer('round_id')
         .unsigned()

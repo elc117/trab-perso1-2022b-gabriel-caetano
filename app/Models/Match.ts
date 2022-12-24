@@ -8,6 +8,9 @@ export default class Match extends BaseModel {
   public id: number
 
   @column()
+  public fixtureId: number
+
+  @column()
   public roundId: number
 
   @column()

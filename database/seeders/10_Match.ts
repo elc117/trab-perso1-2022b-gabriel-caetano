@@ -18,6 +18,7 @@ export default class MatchSeeder extends BaseSeeder {
 
       const newMatch = new Match()
       newMatch.merge({
+        fixtureId: fixtureData.fixture.id,
         roundId: round.id,
         homeTeamId: homeTeam.id,
         awayTeamId: awayTeam.id,
