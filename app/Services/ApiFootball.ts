@@ -40,7 +40,7 @@ class ApiFootball {
   }
 
   public async getRoundsByLeagueAndSeason(leagueId: number, season: number) {
-    return await this.get(`/fixtures?league=${leagueId}&season=${season}`)
+    return await this.get(`/fixtures/rounds?league=${leagueId}&season=${season}`)
   }
 
   public async getFixtureByLeagueAndSeason(leagueId: number, season: number, round: string) {

@@ -6,7 +6,6 @@ export default class SeasonSeeder extends BaseSeeder {
   private leagueId = 135
   public async run() {
     const leagueData = await ApiFootball.getLeagueById(this.leagueId)
-    console.log(leagueData)
 
     const seasons: Season[] = []
     for (const seasonData of leagueData.response[0].seasons) {
