@@ -1,10 +1,15 @@
 import fetch from 'node-fetch'
 import Env from '@ioc:Adonis/Core/Env'
-import convertToQuery from './ConvertoToQuery'
 
+/**
+ * Service to connect with football data source
+ * Documentation for the api used?
+ * https://www.api-football.com/documentation-v3
+ * To have access to the needed keys contact the admin
+ */
 class ApiFootball {
   private apiHost = Env.get('API_FOOTBALL_HOST')
-  private baseUrl = `https://${this.apiHost}/v3`
+  private baseUrl = `https://${this.apiHost}`
 
   private async get(subUrl: string) {
     const options = {
@@ -43,10 +48,8 @@ class ApiFootball {
     return await this.get(`/fixtures/rounds?league=${leagueId}&season=${season}`)
   }
 
-  public async getFixtureByLeagueAndSeason(leagueId: number, season: number, round: string) {
-    return await this.get(
-      `/fixtures?league=${leagueId}&season=${season}&round=${convertToQuery(round)}`
-    )
+  public async getFixturesByLeagueAndSeason(leagueId: number, season: number) {
+    return await this.get(`/fixtures?league=${leagueId}&season=${season}`)
   }
 }
 export default new ApiFootball()
