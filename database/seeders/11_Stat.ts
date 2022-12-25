@@ -6,13 +6,13 @@ import ApiFootball from 'App/Services/ApiFootball'
 
 /**
  * done:
- * falta 6 e do 9 em diante
- * 9
+ * falta do 16 em diante
+ * 15
  */
 
 export default class StatSeeder extends BaseSeeder {
   public async run() {
-    const matches = await Match.query().select('*').where('round_id', 8)
+    const matches = await Match.query().select('*').where('round_id', 15)
     const statsArray: Stat[] = []
     for (const match of matches) {
       const fixtureData = await ApiFootball.getStatsByFixtureId(match.fixtureId)

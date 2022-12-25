@@ -4,11 +4,14 @@ import {
   belongsTo,
   BelongsTo,
   column,
+  HasMany,
+  hasMany,
   ManyToMany,
   manyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
 import League from './League'
 import Team from './Team'
+import Round from './Round'
 
 export default class Season extends BaseModel {
   @column({ isPrimary: true })
@@ -37,4 +40,7 @@ export default class Season extends BaseModel {
 
   @manyToMany(() => Team)
   public teams: ManyToMany<typeof Team>
+
+  @hasMany(() => Round)
+  public rounds: HasMany<typeof Round>
 }

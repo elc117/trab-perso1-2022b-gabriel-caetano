@@ -1,7 +1,17 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, BelongsTo, column, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  belongsTo,
+  BelongsTo,
+  column,
+  HasMany,
+  hasMany,
+  HasOne,
+  hasOne,
+} from '@ioc:Adonis/Lucid/Orm'
 import Team from './Team'
 import Round from './Round'
+import Stat from './Stat'
 
 export default class Match extends BaseModel {
   @column({ isPrimary: true })
@@ -42,4 +52,7 @@ export default class Match extends BaseModel {
 
   @belongsTo(() => Round)
   public round: BelongsTo<typeof Round>
+
+  @hasMany(() => Stat)
+  public stats: HasMany<typeof Stat>
 }

@@ -5,6 +5,7 @@ Route.get('/', async () => {
 })
 
 Route.get('/api', 'DataServiceController.index')
+Route.get('/test', 'Client/PredictionController.index')
 
 /* Session routes */
 Route.post('register', 'SessionsController.register')
