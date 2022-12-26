@@ -3,8 +3,9 @@ import Prediction from 'App/Services/Prediction'
 
 export default class PredictionController {
   public async index({ request, response }: HttpContextContract) {
-    const { teamId, seasonId } = request.all()
-    const res = Prediction.prediction1(seasonId, teamId, 16, 6.5, 'Corner Kicks')
+    const { leagueId } = request.all()
+    // const res = Prediction.predictionsByMatch(matchId, 12.5, 'Corner Kicks')
+    const res = Prediction.getCurrentRound(leagueId)
     return res
   }
 }

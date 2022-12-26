@@ -42,6 +42,7 @@ export default class Stats extends BaseSchema {
           'Passes %',
         ])
         .notNullable()
+      table.enum('period', ['total', 'first', 'second']).notNullable().defaultTo('total')
       table.integer('value').notNullable()
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
