@@ -22,6 +22,8 @@ export default class Predictions extends BaseSchema {
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
         .notNullable()
+      table.enum('under_over', ['under', 'over']).notNullable().defaultTo('under')
+      table.decimal('bet_value', 5, 1).notNullable()
       table.float('home_team_prediction').notNullable()
       table.float('away_team_prediction').notNullable()
       table.float('match_prediction').notNullable()

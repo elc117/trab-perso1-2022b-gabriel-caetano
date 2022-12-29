@@ -25,6 +25,12 @@ export default class Prediction extends BaseModel {
   @column()
   public manualRisc: number
 
+  @column()
+  public underOver: string //from enum ['under', 'over']
+
+  @column()
+  public betValue: number
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

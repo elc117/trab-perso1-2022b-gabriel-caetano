@@ -27,16 +27,14 @@ class PredictionService {
   }
 
   private async getMatchesByRound(roundId: number) {
-    const matches = []
-
-    return matches
+    return await Match.query().where('round_id', roundId)
   }
 
   private async getStatsByTeam(
     seasonId: number,
     teamId: number,
     currentRound: number,
-    type: string
+    type: number
   ) {
     return await Round.query()
       .where('season_id', seasonId)
@@ -46,7 +44,7 @@ class PredictionService {
           .where('home_team_id', teamId)
           .orWhere('away_team_id', teamId)
           .preload('stats', (builder2) => {
-            builder2.andWhere('type', type)
+            builder2.andWhere('stat_type_id', type)
           })
       })
   }
@@ -56,7 +54,8 @@ class PredictionService {
     teamId: number,
     currentRound: number,
     bet: number,
-    type: string
+    type: number,
+    underOver: string
   ) {
     const rounds = await this.getStatsByTeam(seasonId, teamId, currentRound, type)
     let sum = 0
@@ -64,12 +63,18 @@ class PredictionService {
       const value1 = round.matches.at(0)?.stats.at(0)?.value!
       const value2 = round.matches.at(0)?.stats.at(1)?.value!
       const value = value1 + value2
-      if (value && value <= bet) sum += 1
+      if (underOver === 'under' && value && value <= bet) sum += 1
+      if (underOver === 'over' && value && value > bet) sum += 1
     })
     return sum / rounds.length
   }
 
-  public async predictionsByMatch(matchId: number, betValue: number, betType: string) {
+  public async predictionsByMatch(
+    matchId: number,
+    betValue: number,
+    betType: number,
+    underOver: string
+  ): Promise<Prediction> {
     const match = await Match.findOrFail(matchId)
     const round = await Round.findOrFail(match.roundId)
     const homeTeamPrediction = await this.predictionByTeam(
@@ -77,44 +82,49 @@ class PredictionService {
       match.homeTeamId,
       match.roundId,
       betValue,
-      betType
+      betType,
+      underOver
     )
     const awayTeamPrediction = await this.predictionByTeam(
       round.seasonId,
       match.awayTeamId,
       match.roundId,
       betValue,
-      betType
+      betType,
+      underOver
     )
     const awayFact = (1 - awayTeamPrediction) / 10
     const homeFact = (1 - homeTeamPrediction) / 10
     const riscFact = 1 - (awayFact + homeFact / 2)
     const manualRisc = 1 // manually changed when needed
 
-    return {
+    const prediction = new Prediction()
+    prediction.merge({
       matchId: match.id,
       homeTeamPrediction,
       awayTeamPrediction,
       matchPrediction: ((homeTeamPrediction + awayTeamPrediction) / 2) * riscFact,
       manualRisc,
-    }
+      underOver,
+      betValue,
+    })
+    return prediction
   }
 
-  public async generatePredictionsByLeague(leagueId: number, betValue: number, betType: string) {
-    /**
-     * get current round from league
-     * get matches from round
-     * get predictionsByMatch
-     * save all predictions
-     */
+  public async generatePredictionsByLeague(
+    leagueId: number,
+    betValue: number,
+    betType: number,
+    underOver: string
+  ) {
     const currentRound = await this.getCurrentRound(leagueId)
     const matches = await this.getMatchesByRound(currentRound)
     const predictions: Prediction[] = []
     for (const match of matches) {
-      // get match prediction
+      const prediction = await this.predictionsByMatch(match.id, betValue, betType, underOver)
+      predictions.push(prediction)
     }
-
-    Prediction.createMany(predictions)
+    await Prediction.createMany(predictions)
   }
 }
 
