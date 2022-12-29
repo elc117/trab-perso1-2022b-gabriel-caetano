@@ -11,6 +11,9 @@ export default class StatType extends BaseModel {
   @column()
   public slug: string
 
+  @column()
+  public active: string
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

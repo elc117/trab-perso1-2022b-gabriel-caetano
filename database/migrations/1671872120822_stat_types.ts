@@ -8,9 +8,7 @@ export default class StatTypes extends BaseSchema {
       table.increments('id')
       table.string('name').notNullable()
       table.string('slug').notNullable()
-      /**
-       * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
-       */
+      table.boolean('active').notNullable().defaultTo(false)
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

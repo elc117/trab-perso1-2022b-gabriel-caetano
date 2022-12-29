@@ -12,6 +12,7 @@ export default class LeaguesController {
         name: league.name,
         slug: league.slug,
         logoUrl: league.logoUrl,
+        active: league.active,
       }
     })
   }

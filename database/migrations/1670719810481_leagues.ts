@@ -26,6 +26,7 @@ export default class Leagues extends BaseSchema {
       table.string('name').notNullable()
       table.string('slug').notNullable()
       table.string('logo_url')
+      table.boolean('active').notNullable().defaultTo(false)
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

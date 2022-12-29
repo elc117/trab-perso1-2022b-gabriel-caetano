@@ -26,6 +26,9 @@ export default class League extends BaseModel {
   @column()
   public logoUrl: string
 
+  @column()
+  public active: boolean
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

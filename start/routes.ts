@@ -40,6 +40,7 @@ Route.group(() => {
 Route.group(() => {
   Route.get('leagues', 'LeaguesController.index')
   Route.get('predictions', 'PredictionsController.index')
+  Route.get('stat-types', 'StatTypesController.index')
 })
   .namespace('App/Controllers/Http/Customer')
   .prefix('customer')
