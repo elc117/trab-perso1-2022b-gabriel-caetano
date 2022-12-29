@@ -10,7 +10,7 @@ class PredictionService {
     const season = await Season.query()
       .select('id')
       .where('league_id', leagueId)
-      .where('start_date', '<', today)
+      .andWhere('start_date', '<', today)
       .andWhere('end_date', '>', today)
       .firstOrFail()
 
@@ -107,6 +107,7 @@ class PredictionService {
       manualRisc,
       underOver,
       betValue,
+      statTypeId: betType,
     })
     return prediction
   }
