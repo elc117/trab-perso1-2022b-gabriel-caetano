@@ -5,7 +5,7 @@ import Season from 'App/Models/Season'
 import { DateTime } from 'luxon'
 
 class PredictionService {
-  public async getCurrentRound(leagueId: number) {
+  private async getCurrentRound(leagueId: number) {
     const today = DateTime.now().toISO()
     const season = await Season.query()
       .select('id')
@@ -69,7 +69,7 @@ class PredictionService {
     return sum / rounds.length
   }
 
-  public async predictionsByMatch(
+  private async predictionsByMatch(
     matchId: number,
     betValue: number,
     betType: number,

@@ -4,13 +4,12 @@ Route.get('/', async () => {
   return { hello: 'world' }
 })
 
-Route.get('/api', 'DataServiceController.index')
-Route.get('/test', 'Client/PredictionController.index')
+// Route.get('/test', 'Client/PredictionsController.index')
 
 /* Session routes */
 Route.post('register', 'SessionsController.register')
 Route.post('sessions', 'SessionsController.create')
-Route.post('/sessions/validate', 'SessionController.validate')
+Route.post('/sessions/validate', 'SessionsController.validate')
 
 /* Forgot password routes */
 Route.post('users/forgot-password', 'ForgotPasswordController.store')
@@ -21,19 +20,27 @@ Route.group(() => {
   Route.post('sessions/logout', 'SessionsController.destroy') //removes current token from api_tokens table
 
   Route.put('/users/:id/change-password', 'ChangePasswordController.update')
-  Route.post('/users/:id/profile-pictures', 'ProfilePictureController.store')
-  Route.get('/users/:id/profile-pictures', 'ProfilePictureController.index')
+  Route.post('/users/:id/profile-pictures', 'ProfilePicturesController.store')
+  Route.get('/users/:id/profile-pictures', 'ProfilePicturesController.index')
 }).middleware(['auth'])
 
 /* Admin routes */
 Route.group(() => {
-  Route.resource('admins', 'AdminController').apiOnly().except(['destroy', 'store', 'show'])
+  Route.resource('admins', 'AdminsController').apiOnly().except(['destroy', 'store', 'show'])
 
-  Route.put('/users/:id/change-password', 'UserController.updateUserPassword')
-  Route.get('/users/:id/profile-pictures', 'UserController.getUserProfilePicture')
-  Route.post('/users/:id/profile-pictures', 'UserController.storeUserProfilePicture')
-  Route.post('/generate-predictions', 'PredictionController.generatePredictions')
+  Route.put('/users/:id/change-password', 'UsersController.updateUserPassword')
+  Route.get('/users/:id/profile-pictures', 'UsersController.getUserProfilePicture')
+  Route.post('/users/:id/profile-pictures', 'UsersController.storeUserProfilePicture')
+  Route.post('/generate-predictions', 'PredictionsController.generatePredictions')
 })
   .namespace('App/Controllers/Http/Admin')
   .prefix('admin')
   .middleware(['auth', 'role:admin'])
+
+Route.group(() => {
+  Route.get('leagues', 'LeaguesController.index')
+  Route.get('predictions', 'PredictionsController.index')
+})
+  .namespace('App/Controllers/Http/Customer')
+  .prefix('customer')
+  .middleware(['auth', 'role:customer'])
