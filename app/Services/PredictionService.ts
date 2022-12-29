@@ -30,6 +30,27 @@ class PredictionService {
     return await Match.query().where('round_id', roundId)
   }
 
+  public async indexPredictions(
+    leagueId: number,
+    statId: number,
+    betValue: number,
+    underOver: string
+  ) {
+    const round = await this.getCurrentRound(leagueId)
+    const matches = await this.getMatchesByRound(round)
+    return await Prediction.query()
+      .whereIn(
+        'match_id',
+        matches.map((match) => match.id)
+      )
+      .andWhere('stat_type_id', statId)
+      .andWhere('bet_value', betValue)
+      .andWhere('under_over', underOver)
+      .preload('match', (builder) => {
+        builder.preload('awayTeam').preload('homeTeam')
+      })
+  }
+
   private async getStatsByTeam(
     seasonId: number,
     teamId: number,
