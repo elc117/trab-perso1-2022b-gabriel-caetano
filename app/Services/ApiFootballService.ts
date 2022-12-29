@@ -1,5 +1,8 @@
 import fetch from 'node-fetch'
 import Env from '@ioc:Adonis/Core/Env'
+import Stat from 'App/Models/Stat'
+import Team from 'App/Models/Team'
+import Match from 'App/Models/Match'
 
 /**
  * Service to connect with football data source
@@ -7,7 +10,7 @@ import Env from '@ioc:Adonis/Core/Env'
  * https://www.api-football.com/documentation-v3
  * To have access to the needed keys contact the admin
  */
-class ApiFootball {
+class ApiFootballService {
   private apiHost = Env.get('API_FOOTBALL_HOST')
   private baseUrl = `https://${this.apiHost}`
 
@@ -55,5 +58,31 @@ class ApiFootball {
   public async getStatsByFixtureId(fixtureId: number) {
     return await this.get(`/fixtures/statistics?fixture=${fixtureId}`)
   }
+
+  public async getStatsByRound(roundOrder: number) {
+    const matches = await Match.query().select('*').where('round_id', roundOrder)
+    const statsArray: Stat[] = []
+    for (const match of matches) {
+      const fixtureData = await this.getStatsByFixtureId(match.fixtureId)
+      for (const teamData of fixtureData.response) {
+        const apiFootballId = teamData.team.id
+        const team = await Team.findByOrFail('api_football_id', apiFootballId)
+        for (const stats of teamData.statistics) {
+          const newStats = new Stat()
+          let value = 0
+          if (typeof stats.value === 'string') value = parseInt(stats.value)
+          if (typeof stats.value === 'number') value = stats.value
+          newStats.merge({
+            matchId: match.id,
+            teamId: team.id,
+            type: stats.type,
+            value,
+          })
+          statsArray.push(newStats)
+        }
+      }
+    }
+    await Stat.createMany(statsArray)
+  }
 }
-export default new ApiFootball()
+export default new ApiFootballService()

@@ -1,14 +1,14 @@
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
 import Round from 'App/Models/Round'
 import Match from 'App/Models/Match'
-import ApiFootball from 'App/Services/ApiFootball'
+import ApiFootballService from 'App/Services/ApiFootballService'
 import Team from 'App/Models/Team'
 
 export default class MatchSeeder extends BaseSeeder {
   private leagueId = 135
   private season = 2022
   public async run() {
-    const fixturesData = await ApiFootball.getFixturesByLeagueAndSeason(this.leagueId, this.season)
+    const fixturesData = await ApiFootballService.getFixturesByLeagueAndSeason(this.leagueId, this.season)
     const matches: Match[] = []
     for (const fixtureData of fixturesData.response) {
       const roundName = fixtureData.league.round

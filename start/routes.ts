@@ -32,6 +32,7 @@ Route.group(() => {
   Route.put('/users/:id/change-password', 'UserController.updateUserPassword')
   Route.get('/users/:id/profile-pictures', 'UserController.getUserProfilePicture')
   Route.post('/users/:id/profile-pictures', 'UserController.storeUserProfilePicture')
+  Route.post('/generate-predictions', 'PredictionController.generatePredictions')
 })
   .namespace('App/Controllers/Http/Admin')
   .prefix('admin')

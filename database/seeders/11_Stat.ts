@@ -2,7 +2,7 @@ import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
 import Match from 'App/Models/Match'
 import Stat from 'App/Models/Stat'
 import Team from 'App/Models/Team'
-import ApiFootball from 'App/Services/ApiFootball'
+import ApiFootballService from 'App/Services/ApiFootballService'
 
 /**
  * done:
@@ -15,7 +15,7 @@ export default class StatSeeder extends BaseSeeder {
     const matches = await Match.query().select('*').where('round_id', 15)
     const statsArray: Stat[] = []
     for (const match of matches) {
-      const fixtureData = await ApiFootball.getStatsByFixtureId(match.fixtureId)
+      const fixtureData = await ApiFootballService.getStatsByFixtureId(match.fixtureId)
       for (const teamData of fixtureData.response) {
         const apiFootballId = teamData.team.id
         const team = await Team.findByOrFail('api_football_id', apiFootballId)

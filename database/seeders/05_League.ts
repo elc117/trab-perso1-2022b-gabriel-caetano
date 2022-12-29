@@ -1,12 +1,12 @@
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
 import Country from 'App/Models/Country'
 import League from 'App/Models/League'
-import apiFootball from 'App/Services/ApiFootball'
+import ApiFootballService from 'App/Services/ApiFootballService'
 import slugify from 'slugify'
 
 export default class LeagueSeeder extends BaseSeeder {
   public async run() {
-    const leaguesData = await apiFootball.listLeagues()
+    const leaguesData = await ApiFootballService.listLeagues()
     const leagues: League[] = []
     for (const leagueData of leaguesData.response) {
       const newLeague = new League()

@@ -11,4 +11,13 @@ export default class PredictionController {
     const res8 = await Prediction.predictionsByMatch(matchId, 8.5, 'Corner Kicks')
     return { res12, res11, res10, res9, res8 }
   }
+
+  public async generatePredictions() {
+    // const leagues = await League.query().where('active', true)
+
+    return await Prediction.generatePredictionsByLeague(135, 12.5, 'Corner Kicks')
+    // for (const league of leagues) {
+
+    // })
+  }
 }

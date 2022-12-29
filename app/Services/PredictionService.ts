@@ -1,29 +1,35 @@
 import Match from 'App/Models/Match'
+import Prediction from 'App/Models/Prediction'
 import Round from 'App/Models/Round'
 import Season from 'App/Models/Season'
-import Team from 'App/Models/Team'
 import { DateTime } from 'luxon'
 
-class Prediction {
-  public async getCurrentRound(LeagueId: number) {
-    const today = DateTime.now()
+class PredictionService {
+  public async getCurrentRound(leagueId: number) {
+    const today = DateTime.now().toISO()
     const season = await Season.query()
       .select('id')
-      .where('league_id', LeagueId)
-      .orderBy('year', 'desc')
+      .where('league_id', leagueId)
+      .where('start_date', '<', today)
+      .andWhere('end_date', '>', today)
       .firstOrFail()
-    console.log(season)
 
     const rounds = await Round.query()
       .select(['rounds.*', 'm.round_id'])
       .leftJoin('matches as m', 'm.round_id', 'rounds.id')
       .where('season_id', season.id)
-      .where('m.date', '<', today.toISO())
+      .where('m.date', '<', today)
       .groupBy('round_id')
       .count('round_id as total')
       .orderBy('order')
 
     return rounds.length + 1
+  }
+
+  private async getMatchesByRound(roundId: number) {
+    const matches = []
+
+    return matches
   }
 
   private async getStatsByTeam(
@@ -64,16 +70,6 @@ class Prediction {
   }
 
   public async predictionsByMatch(matchId: number, betValue: number, betType: string) {
-    /**
-     * buscar os 2 times teamId1 e teamId2
-     * buscar a rodada = roundId
-     * buscar a season = seasonId
-     * const predTeam1 = Prediction.prediction1(seasonId, teamId1, roudId, betValue, betType)
-     * const predTeam2 = Prediction.prediction1(seasonId, teamId2, roudId, betValue, betType)
-     * pred = ((predTeam1 + predTeam2) / 2) * riscFactor
-     * criar previsão no banco para a partida futura
-     */
-    const riscFact = 1
     const match = await Match.findOrFail(matchId)
     const round = await Round.findOrFail(match.roundId)
     const homeTeamPrediction = await this.predictionByTeam(
@@ -90,18 +86,36 @@ class Prediction {
       betValue,
       betType
     )
-
-    // const matchPrediction = (riscFact * (homeTeamPrediction + awayTeamPrediction)) / 2
+    const awayFact = (1 - awayTeamPrediction) / 10
+    const homeFact = (1 - homeTeamPrediction) / 10
+    const riscFact = 1 - (awayFact + homeFact / 2)
+    const manualRisc = 1 // manually changed when needed
 
     return {
       matchId: match.id,
-      homeTeamId: match.homeTeamId,
-      awayTeamId: match.awayTeamId,
       homeTeamPrediction,
       awayTeamPrediction,
-      riscFact,
+      matchPrediction: ((homeTeamPrediction + awayTeamPrediction) / 2) * riscFact,
+      manualRisc,
     }
+  }
+
+  public async generatePredictionsByLeague(leagueId: number, betValue: number, betType: string) {
+    /**
+     * get current round from league
+     * get matches from round
+     * get predictionsByMatch
+     * save all predictions
+     */
+    const currentRound = await this.getCurrentRound(leagueId)
+    const matches = await this.getMatchesByRound(currentRound)
+    const predictions: Prediction[] = []
+    for (const match of matches) {
+      // get match prediction
+    }
+
+    Prediction.createMany(predictions)
   }
 }
 
-export default new Prediction()
+export default new PredictionService()

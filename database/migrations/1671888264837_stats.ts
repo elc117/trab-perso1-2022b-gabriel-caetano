@@ -23,25 +23,31 @@ export default class Stats extends BaseSchema {
         .onDelete('CASCADE')
         .notNullable()
       table
-        .enum('type', [
-          'Shots on Goal',
-          'Shots off Goal',
-          'Total Shots',
-          'Blocked Shots',
-          'Shots insidebox',
-          'Shots outsidebox',
-          'Fouls',
-          'Corner Kicks',
-          'Offsides',
-          'Ball Possession',
-          'Yellow Cards',
-          'Red Cards',
-          'Goalkeeper Saves',
-          'Total passes',
-          'Passes accurate',
-          'Passes %',
-        ])
+        .integer('stat_type_id')
+        .unsigned()
+        .references('id')
+        .inTable('stat_types')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE')
         .notNullable()
+      // , [
+      //   'Shots on Goal',
+      //   'Shots off Goal',
+      //   'Total Shots',
+      //   'Blocked Shots',
+      //   'Shots insidebox',
+      //   'Shots outsidebox',
+      //   'Fouls',
+      //   'Corner Kicks',
+      //   'Offsides',
+      //   'Ball Possession',
+      //   'Yellow Cards',
+      //   'Red Cards',
+      //   'Goalkeeper Saves',
+      //   'Total passes',
+      //   'Passes accurate',
+      //   'Passes %',
+      // ])
       table.enum('period', ['total', 'first', 'second']).notNullable().defaultTo('total')
       table.integer('value').notNullable()
       table.timestamp('created_at', { useTz: true })

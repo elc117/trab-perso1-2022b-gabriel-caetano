@@ -1,12 +1,12 @@
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
 import Country from 'App/Models/Country'
 import Team from 'App/Models/Team'
-import ApiFootball from 'App/Services/ApiFootball'
+import ApiFootballService from 'App/Services/ApiFootballService'
 import slugify from 'slugify'
 
 export default class TeamSeeder extends BaseSeeder {
   public async run() {
-    const teamsData = await ApiFootball.listTeamsByLeagueAndSeason(135, 2022)
+    const teamsData = await ApiFootballService.listTeamsByLeagueAndSeason(135, 2022)
     const teams: Team[] = []
     for (const teamData of teamsData.response) {
       const newTeam = new Team()
