@@ -38,6 +38,7 @@ Route.group(() => {
   .middleware(['auth', 'role:admin'])
 
 Route.group(() => {
+  Route.get('/', 'CustomersController.index')
   Route.get('leagues', 'LeaguesController.index')
   Route.get('predictions', 'PredictionsController.index')
   Route.get('stat-types', 'StatTypesController.index')
