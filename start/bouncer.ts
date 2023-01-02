@@ -1,9 +1,7 @@
-/*
-import Bouncer from '@ioc:Adonis/Addons/Bouncer'
+// import Bouncer from '@ioc:Adonis/Addons/Bouncer'
 
-import Post from 'App/Models/Role'
-import User from 'App/Models/User'
-*/
+// import Post from 'App/Models/Role'
+// import User from 'App/Models/User'
 
 /*
 |--------------------------------------------------------------------------
@@ -21,9 +19,6 @@ import User from 'App/Models/User'
 | ```
 */
 
-/*
-export const { actions } = Bouncer
-	.define('deletePost', (user: User, post: Post) => {
-		return post.user_id === user.id
-	})
-*/
+// export const { actions } = Bouncer.define('deletePost', (user: User, post: Post) => {
+//   return post.user_id === user.id
+// })

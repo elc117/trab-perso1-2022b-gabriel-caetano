@@ -5,6 +5,7 @@ coverage
 .env
 tmp
 plan.md
+pulumi
 
 pull.sh
 push.sh

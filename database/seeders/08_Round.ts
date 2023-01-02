@@ -7,7 +7,10 @@ export default class RoundSeeder extends BaseSeeder {
   private season = 2022
   private seasonId = 13
   public async run() {
-    const roundsData = await ApiFootballService.getRoundsByLeagueAndSeason(this.leagueId, this.season)
+    const roundsData = await ApiFootballService.getRoundsByLeagueAndSeason(
+      this.leagueId,
+      this.season
+    )
     const rounds: Round[] = []
     for (const roundData of roundsData.response) {
       const newRound = new Round()

@@ -8,7 +8,10 @@ export default class MatchSeeder extends BaseSeeder {
   private leagueId = 135
   private season = 2022
   public async run() {
-    const fixturesData = await ApiFootballService.getFixturesByLeagueAndSeason(this.leagueId, this.season)
+    const fixturesData = await ApiFootballService.getFixturesByLeagueAndSeason(
+      this.leagueId,
+      this.season
+    )
     const matches: Match[] = []
     for (const fixtureData of fixturesData.response) {
       const roundName = fixtureData.league.round
