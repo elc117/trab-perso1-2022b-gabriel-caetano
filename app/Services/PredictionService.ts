@@ -30,7 +30,7 @@ class PredictionService {
     return await Match.query().where('round_id', roundId)
   }
 
-  public async indexPredictions(
+  public async listPredictions(
     leagueId: number,
     statId: number,
     betValue: number,
