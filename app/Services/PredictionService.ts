@@ -133,6 +133,22 @@ class PredictionService {
     return prediction
   }
 
+  private async checkOldPrediction(
+    matchId: number,
+    betValue: number,
+    betType: number,
+    underOver: string
+  ) {
+    const oldPrediction = await Prediction.query()
+      .where('match_id', matchId)
+      .andWhere('under_over', underOver)
+      .andWhere('bet_value', betValue)
+      .andWhere('stat_type_id', betType)
+      .first()
+    if (oldPrediction) return true
+    return false
+  }
+
   public async generatePredictionsByLeague(
     leagueId: number,
     betValue: number,
@@ -143,8 +159,11 @@ class PredictionService {
     const matches = await this.getMatchesByRound(currentRound)
     const predictions: Prediction[] = []
     for (const match of matches) {
-      const prediction = await this.predictionsByMatch(match.id, betValue, betType, underOver)
-      predictions.push(prediction)
+      const exist = await this.checkOldPrediction(match.id, betValue, betType, underOver)
+      if (!exist) {
+        const prediction = await this.predictionsByMatch(match.id, betValue, betType, underOver)
+        predictions.push(prediction)
+      }
     }
     await Prediction.createMany(predictions)
   }

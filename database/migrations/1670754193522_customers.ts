@@ -18,6 +18,7 @@ export default class Customers extends BaseSchema {
       table.string('name').notNullable()
       table.string('verification_code')
       table.boolean('verified').notNullable().defaultTo(false)
+      table.boolean('active').notNullable().defaultTo(false)
       // check customer info
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })

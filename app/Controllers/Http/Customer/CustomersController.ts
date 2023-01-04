@@ -8,7 +8,7 @@ export default class CustomersController {
     return {
       email: user.email,
       name: customer.name,
-      active: true,
+      active: customer.active,
     }
   }
 }

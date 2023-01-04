@@ -15,6 +15,9 @@ export default class Customer extends BaseModel {
   @column()
   public verified: boolean
 
+  @column()
+  public active: boolean
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
