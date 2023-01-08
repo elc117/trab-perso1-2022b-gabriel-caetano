@@ -11,7 +11,7 @@ import { DateTime } from 'luxon'
 import Role from 'App/Models/Role'
 
 export default class SessionsController {
-  public async register({ request, response }: HttpContextContract) {
+  public async register({ auth, request, response }: HttpContextContract) {
     const { email, password } = await request.validate(SessionUserValidator)
     const { name } = await request.validate(RegisterCustomerValidator)
     const trx = await Database.transaction()
@@ -24,7 +24,9 @@ export default class SessionsController {
       })
       await Customer.create({ userId: user.id, name }, trx)
       await trx.commit()
-      return response.created()
+      const roles = await UserHelper.getRoles(user)
+      const token = await auth.attempt(email, password)
+      return response.created({ auth: token, roles: roles })
     } catch (e) {
       await trx.rollback()
       console.log(e)
