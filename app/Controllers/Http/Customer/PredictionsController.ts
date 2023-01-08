@@ -1,6 +1,9 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Customer from 'App/Models/Customer'
+import League from 'App/Models/League'
 import Match from 'App/Models/Match'
+import Round from 'App/Models/Round'
+import StatType from 'App/Models/StatType'
 import Team from 'App/Models/Team'
 import PredictionService from 'App/Services/PredictionService'
 import IndexPredictionValidator from 'App/Validators/IndexPredictionValidator'
@@ -12,56 +15,59 @@ export default class PredictionController {
     )
     const customer = await Customer.findOrFail(auth.user!.id)
     const { active } = customer
-    const predictions = await PredictionService.listPredictions(
+    const roundOrder = await PredictionService.getCurrentRound(leagueId)
+    const round = await Round.findByOrFail('order', roundOrder)
+    const league = await League.findOrFail(leagueId)
+    const stat = await StatType.findOrFail(statType)
+
+    const predictionsData = await PredictionService.listPredictions(
       leagueId,
       statType,
       betValue,
       underOver
     )
 
-    return predictions.map((prediction) => {
+    const predictions = predictionsData.map((prediction) => {
       const matchData = prediction.$preloaded.match as Match
-      const match = new Match()
-      match.merge({
+      const match = {
         id: matchData.id,
-        roundId: matchData.roundId,
         date: matchData.date,
-      })
+      }
       const awayTeamData = matchData.$preloaded.awayTeam as Team
-      const awayTeam = new Team()
-      awayTeam.merge({
+      const awayTeam = {
         id: awayTeamData.id,
-        countryId: awayTeamData.countryId,
         name: awayTeamData.name,
-        slug: awayTeamData.slug,
-        code: awayTeamData.code,
-        founded: awayTeamData.founded,
         logoUrl: awayTeamData.logoUrl,
-      })
+      }
       const homeTeamData = matchData.$preloaded.homeTeam as Team
-      const homeTeam = new Team()
-      homeTeam.merge({
+      const homeTeam = {
         id: homeTeamData.id,
-        countryId: homeTeamData.countryId,
         name: homeTeamData.name,
-        slug: homeTeamData.slug,
-        code: homeTeamData.code,
-        founded: homeTeamData.founded,
         logoUrl: homeTeamData.logoUrl,
-      })
-
-      return {
-        id: prediction.id,
-        match,
-        awayTeam,
-        homeTeam,
-        statTypeId: prediction.statTypeId,
-        underOver: prediction.underOver,
-        betValue: prediction.betValue,
+      }
+      const calculatedPrediction = {
+        predictionId: prediction.id,
         homeTeamPrediction: active ? prediction.homeTeamPrediction : 0,
         awayTeamPrediction: active ? prediction.awayTeamPrediction : 0,
         matchPrediction: active ? prediction.matchPrediction * prediction.manualRisc : 0,
       }
+
+      return {
+        prediction: calculatedPrediction,
+        match,
+        awayTeam,
+        homeTeam,
+      }
     })
+    return {
+      leagueId,
+      leagueName: league.name,
+      roundOrder,
+      roundName: round.name,
+      statType: stat.name,
+      betValue,
+      underOver,
+      predictions,
+    }
   }
 }

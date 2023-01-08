@@ -5,7 +5,7 @@ import Season from 'App/Models/Season'
 import { DateTime } from 'luxon'
 
 class PredictionService {
-  private async getCurrentRound(leagueId: number) {
+  public async getCurrentRound(leagueId: number) {
     const today = DateTime.now().toISODate()
     const season = await Season.query()
       .select('id')
