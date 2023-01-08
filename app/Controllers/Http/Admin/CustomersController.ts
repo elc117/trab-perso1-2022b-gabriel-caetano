@@ -4,13 +4,24 @@ import ActiveCustomerValidator from 'App/Validators/ActiveCustomerValidator'
 import { DateTime } from 'luxon'
 
 export default class CustomersController {
-  public async activate({ request }: HttpContextContract) {
-    const { customerId } = await request.validate(ActiveCustomerValidator)
+  public async activate({ request, response }: HttpContextContract) {
+    const { customerId, daysToAdd } = await request.validate(ActiveCustomerValidator)
     const customer = await Customer.findOrFail(customerId)
-    const today = DateTime.now().toISODate()
-    if (!customer.active) {
-      customer.merge({ active: true, dueDate: today })
-      await customer.save()
+    try {
+      if (customer.active) {
+        const planDueDate = customer.planDueDate.plus({ days: daysToAdd })
+        customer.merge({ planDueDate })
+        await customer.save()
+      } else {
+        const planDueDate = DateTime.now().plus({ days: daysToAdd })
+        customer.merge({ active: true, planDueDate })
+        await customer.save()
+      }
+    } catch (e) {
+      console.log(e)
+      return response.internalServerError({
+        message: 'Houve um problema com a requisição, por favor tente novamente mais tarde.',
+      })
     }
   }
 }

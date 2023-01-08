@@ -9,6 +9,7 @@ export default class CustomersController {
       email: user.email,
       name: customer.name,
       active: customer.active,
+      planDueDate: customer.planDueDate,
     }
   }
 }

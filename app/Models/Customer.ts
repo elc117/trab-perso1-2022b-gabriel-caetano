@@ -18,8 +18,8 @@ export default class Customer extends BaseModel {
   @column()
   public active: boolean
 
-  @column()
-  public dueDate: DateTime
+  @column.dateTime()
+  public planDueDate: DateTime
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

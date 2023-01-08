@@ -12,10 +12,12 @@ export default class ActiveCustomerValidator {
         column: 'user_id',
       }),
     ]),
+    daysToAdd: schema.number(),
   })
 
   public messages = {
     'customerId.required': 'Você deve selecionar um usuário.',
     'customerId.exists': 'O usuário selecionado é inválido.',
+    'daysToAdd.required': 'Você deve informar quantos dias de plano adicionar.',
   }
 }
