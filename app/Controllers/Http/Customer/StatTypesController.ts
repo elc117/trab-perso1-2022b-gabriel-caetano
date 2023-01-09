@@ -9,6 +9,7 @@ export default class StatTypesController {
       return {
         id: type.id,
         name: type.name,
+        namePt: type.namePt,
         slug: type.slug,
         active: type.active,
       }

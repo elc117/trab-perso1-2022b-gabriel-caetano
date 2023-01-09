@@ -7,6 +7,7 @@ export default class StatTypes extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('name').notNullable()
+      table.string('name_pt').notNullable()
       table.string('slug').notNullable()
       table.boolean('active').notNullable().defaultTo(false)
       table.timestamp('created_at', { useTz: true })

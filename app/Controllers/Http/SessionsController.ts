@@ -9,10 +9,11 @@ import Database from '@ioc:Adonis/Lucid/Database'
 import Customer from 'App/Models/Customer'
 import { DateTime } from 'luxon'
 import Role from 'App/Models/Role'
+import RegisterUserValidator from 'App/Validators/RegisterUserValidator'
 
 export default class SessionsController {
   public async register({ auth, request, response }: HttpContextContract) {
-    const { email, password } = await request.validate(SessionUserValidator)
+    const { email, password } = await request.validate(RegisterUserValidator)
     const { name } = await request.validate(RegisterCustomerValidator)
     const trx = await Database.transaction()
     try {

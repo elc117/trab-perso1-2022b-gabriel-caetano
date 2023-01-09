@@ -9,6 +9,9 @@ export default class StatType extends BaseModel {
   public name: string
 
   @column()
+  public namePt: string
+
+  @column()
   public slug: string
 
   @column()
