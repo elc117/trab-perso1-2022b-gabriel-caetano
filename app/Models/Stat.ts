@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Match from './Match'
 import Team from './Team'
+import StatType from './StatType'
 
 export default class Stat extends BaseModel {
   @column({ isPrimary: true })
@@ -14,7 +15,10 @@ export default class Stat extends BaseModel {
   public teamId: number
 
   @column()
-  public type: string // from enum
+  public statTypeId: number // from enum
+
+  @column()
+  public period: string // from enum ['total', 'first', 'second']
 
   @column()
   public value: number
@@ -30,4 +34,7 @@ export default class Stat extends BaseModel {
 
   @belongsTo(() => Team)
   public team: BelongsTo<typeof Team>
+
+  @belongsTo(() => StatType)
+  public statType: BelongsTo<typeof StatType>
 }

@@ -6,24 +6,26 @@ import { DateTime } from 'luxon'
 
 class PredictionService {
   public async getCurrentRound(leagueId: number) {
-    const today = DateTime.now().toISODate()
+    const today = DateTime.now()
+
     const season = await Season.query()
       .select('id')
       .where('league_id', leagueId)
-      .andWhere('start_date', '<', today)
-      .andWhere('end_date', '>', today)
+      .andWhere('start_date', '<', today.toISODate())
+      .andWhere('end_date', '>', today.toISODate())
       .firstOrFail()
 
     const rounds = await Round.query()
       .select(['rounds.*', 'm.round_id'])
       .leftJoin('matches as m', 'm.round_id', 'rounds.id')
       .where('season_id', season.id)
-      .where('m.date', '<', today)
+      .where('m.date', '<', today.toISODate())
       .groupBy('round_id')
       .count('round_id as total')
       .orderBy('order')
+    const finishedRounds = rounds.filter((round) => round.$extras.total === 10)
 
-    return rounds.length + 1
+    return finishedRounds.length + 1
   }
 
   private async getMatchesByRound(roundId: number) {
@@ -155,17 +157,21 @@ class PredictionService {
     betType: number,
     underOver: string
   ) {
-    const currentRound = await this.getCurrentRound(leagueId)
-    const matches = await this.getMatchesByRound(currentRound)
-    const predictions: Prediction[] = []
-    for (const match of matches) {
-      const exist = await this.checkOldPrediction(match.id, betValue, betType, underOver)
-      if (!exist) {
-        const prediction = await this.predictionsByMatch(match.id, betValue, betType, underOver)
-        predictions.push(prediction)
+    try {
+      const currentRound = await this.getCurrentRound(leagueId)
+      const matches = await this.getMatchesByRound(currentRound)
+      const predictions: Prediction[] = []
+      for (const match of matches) {
+        const exist = await this.checkOldPrediction(match.id, betValue, betType, underOver)
+        if (!exist) {
+          const prediction = await this.predictionsByMatch(match.id, betValue, betType, underOver)
+          predictions.push(prediction)
+        }
       }
+      await Prediction.createMany(predictions)
+    } catch (e) {
+      console.log(e)
     }
-    await Prediction.createMany(predictions)
   }
 }
 
