@@ -36,6 +36,7 @@ Route.group(() => {
   Route.post('/get-stats-by-round', 'PredictionsController.getStatsByRound')
   Route.get('/get-current-round', 'PredictionsController.getCurrentRound')
   Route.post('/activate-customer', 'CustomersController.activate')
+  Route.post('/load-league-data', 'DataController.loadLeagueData')
 })
   .namespace('App/Controllers/Http/Admin')
   .prefix('admin')

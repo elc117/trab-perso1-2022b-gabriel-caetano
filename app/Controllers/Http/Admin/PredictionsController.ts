@@ -32,7 +32,6 @@ export default class PredictionController {
     const redCards = await Stat.query().where('stat_type_id', 12)
     const oldTotalCards = await Stat.query().where('stat_type_id', 17)
     const totalCards: Stat[] = []
-    console.log('startting...')
 
     yellowCards.forEach((yc: Stat) => {
       const redCard = redCards.find(
@@ -53,7 +52,6 @@ export default class PredictionController {
         totalCards.push(totalCard)
       }
     })
-    console.log('saving...')
 
     await Stat.createMany(totalCards)
   }
