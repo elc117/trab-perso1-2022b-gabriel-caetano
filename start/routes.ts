@@ -1,4 +1,5 @@
 import Route from '@ioc:Adonis/Core/Route'
+import { DateTime } from 'luxon'
 
 Route.get('/', async () => {
   return { hello: 'world' }
@@ -33,7 +34,7 @@ Route.group(() => {
   Route.post('/users/:id/profile-pictures', 'UsersController.storeUserProfilePicture')
   Route.post('/generate-predictions', 'PredictionsController.generatePredictions')
   Route.post('/generate-total-cards-stats', 'PredictionsController.generateTotalCardsStats')
-  Route.post('/get-stats-by-round', 'PredictionsController.getStatsByRound')
+  Route.post('/load-stats-by-round', 'DataController.loadStatsByRound')
   Route.get('/get-current-round', 'PredictionsController.getCurrentRound')
   Route.post('/activate-customer', 'CustomersController.activate')
   Route.post('/load-league-data', 'DataController.loadLeagueData')

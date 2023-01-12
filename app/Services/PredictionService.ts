@@ -5,27 +5,41 @@ import Season from 'App/Models/Season'
 import { DateTime } from 'luxon'
 
 class PredictionService {
+  private getLastRoundEnd() {
+    const today = DateTime.now().plus({ days: 3 })
+    const { weekday } = today
+    if (weekday === 2 || weekday === 5) return today
+    else if (weekday > 2 && weekday < 5) {
+      const diff = weekday - 2
+      return today.plus({ days: -diff })
+    } else if (weekday < 2) {
+      const diff = weekday + 1
+      return today.plus({ days: -diff })
+    } else {
+      // weekday = 6
+      const diff = 1
+      return today.plus({ days: -diff })
+    }
+  }
+
   public async getCurrentRound(leagueId: number) {
-    const today = DateTime.now()
+    let lastEnd = this.getLastRoundEnd()
 
     const season = await Season.query()
       .select('id')
       .where('league_id', leagueId)
-      .andWhere('start_date', '<', today.toISODate())
-      .andWhere('end_date', '>', today.toISODate())
+      .andWhere('start_date', '<', lastEnd.toISODate())
+      .andWhere('end_date', '>', lastEnd.toISODate())
       .firstOrFail()
 
-    const rounds = await Round.query()
+    const lastRound = await Round.query()
       .select(['rounds.*', 'm.round_id'])
       .leftJoin('matches as m', 'm.round_id', 'rounds.id')
       .where('season_id', season.id)
-      .where('m.date', '<', today.toISODate())
-      .groupBy('round_id')
-      .count('round_id as total')
-      .orderBy('order')
-    const finishedRounds = rounds.filter((round) => round.$extras.total === 10)
-
-    return finishedRounds.length + 1
+      .where('m.date', '<', lastEnd.toISODate())
+      .orderBy('order', 'desc')
+      .firstOrFail()
+    return lastRound.order + 1
   }
 
   private async getMatchesByRound(roundId: number) {
@@ -82,14 +96,16 @@ class PredictionService {
   ) {
     const rounds = await this.getStatsByTeam(seasonId, teamId, currentRound, type)
     let sum = 0
-    rounds.forEach((round) => {
+
+    const filteredRounds = rounds.filter((round) => !!round.matches.at(0)?.stats.at(0)?.value)
+    filteredRounds.forEach((round) => {
       const value1 = round.matches.at(0)?.stats.at(0)?.value!
       const value2 = round.matches.at(0)?.stats.at(1)?.value!
       const value = value1 + value2
       if (underOver === 'under' && value && value <= bet) sum += 1
       if (underOver === 'over' && value && value > bet) sum += 1
     })
-    return sum / rounds.length
+    return sum / filteredRounds.length
   }
 
   private async predictionsByMatch(

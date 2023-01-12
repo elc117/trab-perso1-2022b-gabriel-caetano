@@ -15,12 +15,6 @@ export default class LeaguesController {
         active: league.active,
       }
     })
-    let slugs = leaguesRes.map((x) => x.slug)
-    slugs = [...slugs, slugs.at(1)]
-    const slugsSet = new Set(slugs)
-    console.log(slugs.length)
-    console.log([...slugsSet].length)
-
     return leaguesRes
   }
 }

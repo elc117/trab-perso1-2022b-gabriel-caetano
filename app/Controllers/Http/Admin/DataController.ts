@@ -16,25 +16,31 @@ export default class DataController {
   private leagueId: number
   private season: Season
 
-  public async loadLeagueData({ request }: HttpContextContract) {
+  public async loadLeagueData({ request, response }: HttpContextContract) {
     const { leagueId: requestLeagueId } = request.all()
-    this.leagueId = requestLeagueId
-    const league = await League.findOrFail(this.leagueId)
-    this.leagueApiId = league.apiFootballId
+    return response.internalServerError({
+      message: `Rota desativada`,
+      params: { leagueId: requestLeagueId },
+    })
+    // this.leagueId = requestLeagueId
+    // const league = await League.findOrFail(this.leagueId)
+    // this.leagueApiId = league.apiFootballId
     // await this.loadSeasons()
     // console.log('loaded seasons...')
-    const today = DateTime.now().toISODate()
-    this.season = await Season.query()
-      .select('*')
-      .where('league_id', this.leagueId)
-      .andWhere('start_date', '<', today)
-      .andWhere('end_date', '>', today)
-      .firstOrFail()
+    // const today = DateTime.now().toISODate()
+    // this.season = await Season.query()
+    //   .select('*')
+    //   .where('league_id', this.leagueId)
+    //   .andWhere('start_date', '<', today)
+    //   .andWhere('end_date', '>', today)
+    //   .firstOrFail()
     // await this.loadTeams()
     // console.log('loaded teams...')
     // await this.loadRounds()
     // console.log('loaded rounds...')
-    await this.loadMatches()
+    // console.log('startted...')
+    // await this.loadMatches()
+    // console.log('loaded matches...')
   }
 
   private async loadSeasons() {
@@ -132,51 +138,58 @@ export default class DataController {
     console.log('end 2...')
   }
 
-  public async loadStatsByRound({ request }: HttpContextContract) {
+  public async loadStatsByRound({ request, response }: HttpContextContract) {
     const { roundOrder, leagueId } = request.all()
-    const today = DateTime.now().toISODate()
-    const season = await Season.query()
-      .select('id')
-      .where('league_id', leagueId)
-      .andWhere('start_date', '<', today)
-      .andWhere('end_date', '>', today)
-      .firstOrFail()
-    const round = await Round.query()
-      .where('season_id', season.id)
-      .andWhere('order', roundOrder)
-      .first()
-    const matches = await Match.query().select('*').where('round_id', round!.id)
-    const statsArray: Stat[] = []
-    for (const match of matches) {
-      const fixtureData = await ApiFootballService.getStatsByFixtureId(match.fixtureId)
-      for (const teamData of fixtureData.response) {
-        const apiFootballId = teamData.team.id
-        const team = await Team.findByOrFail('api_football_id', apiFootballId)
-        for (const stats of teamData.statistics) {
-          let value = 0
-          if (typeof stats.value === 'string') value = parseInt(stats.value)
-          if (typeof stats.value === 'number') value = stats.value
-          const statType = await StatType.findByOrFail('name', stats.type)
-          const exist = await Stat.query()
-            .where('match_id', match.id)
-            .andWhere('team_id', team.id)
-            .andWhere('stat_type_id', statType.id)
-            .andWhere('period', 'total')
-            .first()
-          if (!exist) {
-            const newStats = new Stat()
-            newStats.merge({
-              matchId: match.id,
-              teamId: team.id,
-              statTypeId: statType.id,
-              period: 'total',
-              value,
-            })
-            statsArray.push(newStats)
-          }
-        }
-      }
-    }
-    await Stat.createMany(statsArray)
+    return response.internalServerError({
+      message: `Rota desativada`,
+      params: { roundOrder, leagueId },
+    })
+    // const today = DateTime.now().toISODate()
+    // const season = await Season.query()
+    //   .select('id')
+    //   .where('league_id', leagueId)
+    //   .andWhere('start_date', '<', today)
+    //   .andWhere('end_date', '>', today)
+    //   .firstOrFail()
+    // const round = await Round.query()
+    //   .where('season_id', season.id)
+    //   .andWhere('order', roundOrder)
+    //   .first()
+    // const matches = await Match.query().select('*').where('round_id', round!.id)
+    // console.log('matches: ', matches.length)
+    // const statsArray: Stat[] = []
+    // for (const match of matches) {
+    //   const fixtureData = await ApiFootballService.getStatsByFixtureId(match.fixtureId)
+    //   for (const teamData of fixtureData.response) {
+    //     const apiFootballId = teamData.team.id
+    //     const team = await Team.findByOrFail('api_football_id', apiFootballId)
+    //     for (const stats of teamData.statistics) {
+    //       let value = 0
+    //       if (typeof stats.value === 'string') value = parseInt(stats.value)
+    //       if (typeof stats.value === 'number') value = stats.value
+    //       const statType = await StatType.findByOrFail('name', stats.type)
+    //       const exist = await Stat.query()
+    //         .where('match_id', match.id)
+    //         .andWhere('team_id', team.id)
+    //         .andWhere('stat_type_id', statType.id)
+    //         .andWhere('period', 'total')
+    //         .first()
+    //       if (!exist) {
+    //         const newStats = new Stat()
+    //         newStats.merge({
+    //           matchId: match.id,
+    //           teamId: team.id,
+    //           statTypeId: statType.id,
+    //           period: 'total',
+    //           value,
+    //         })
+    //         statsArray.push(newStats)
+    //       }
+    //     }
+    //   }
+    // }
+    // console.log('data: ', statsArray.length)
+    // await Stat.createMany(statsArray)
+    // console.log(`round ${roundOrder} done.`)
   }
 }
