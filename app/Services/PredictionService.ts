@@ -54,7 +54,7 @@ class PredictionService {
   ) {
     const round = await this.getCurrentRound(leagueId)
     const matches = await this.getMatchesByRound(round)
-    return await Prediction.query()
+    const predictions = await Prediction.query()
       .whereIn(
         'match_id',
         matches.map((match) => match.id)
@@ -65,6 +65,14 @@ class PredictionService {
       .preload('match', (builder) => {
         builder.preload('awayTeam').preload('homeTeam')
       })
+    predictions.sort((a: Prediction, b: Prediction) => {
+      const matchA = a.$preloaded.match as Match
+      const matchB = b.$preloaded.match as Match
+      if (matchA.date < matchB.date) return -1
+      if (matchA.date > matchB.date) return 1
+      else return 0
+    })
+    return predictions
   }
 
   private async getStatsByTeam(
