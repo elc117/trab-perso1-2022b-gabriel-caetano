@@ -1,5 +1,4 @@
 import Route from '@ioc:Adonis/Core/Route'
-import { DateTime } from 'luxon'
 
 Route.get('/', async () => {
   return { hello: 'world' }
