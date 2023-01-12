@@ -1,13 +1,5 @@
-import Stat from 'App/Models/Stat'
 import Prediction from 'App/Services/PredictionService'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Match from 'App/Models/Match'
-import ApiFootballService from 'App/Services/ApiFootballService'
-import Team from 'App/Models/Team'
-import Round from 'App/Models/Round'
-import { DateTime } from 'luxon'
-import Season from 'App/Models/Season'
-import StatType from 'App/Models/StatType'
 
 export default class PredictionController {
   public async generatePredictions({ response }: HttpContextContract) {

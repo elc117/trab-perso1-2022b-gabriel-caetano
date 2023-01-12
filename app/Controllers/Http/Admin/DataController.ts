@@ -3,13 +3,9 @@ import Match from 'App/Models/Match'
 import ApiFootballService from 'App/Services/ApiFootballService'
 import Team from 'App/Models/Team'
 import Round from 'App/Models/Round'
-import { DateTime } from 'luxon'
 import Season from 'App/Models/Season'
-import League from 'App/Models/League'
 import slugify from 'slugify'
 import Country from 'App/Models/Country'
-import Stat from 'App/Models/Stat'
-import StatType from 'App/Models/StatType'
 
 export default class DataController {
   private leagueApiId: number
@@ -144,52 +140,6 @@ export default class DataController {
       message: `Rota desativada`,
       params: { roundOrder, leagueId },
     })
-    // const today = DateTime.now().toISODate()
-    // const season = await Season.query()
-    //   .select('id')
-    //   .where('league_id', leagueId)
-    //   .andWhere('start_date', '<', today)
-    //   .andWhere('end_date', '>', today)
-    //   .firstOrFail()
-    // const round = await Round.query()
-    //   .where('season_id', season.id)
-    //   .andWhere('order', roundOrder)
-    //   .first()
-    // const matches = await Match.query().select('*').where('round_id', round!.id)
-    // console.log('matches: ', matches.length)
-    // const statsArray: Stat[] = []
-    // for (const match of matches) {
-    //   const fixtureData = await ApiFootballService.getStatsByFixtureId(match.fixtureId)
-    //   for (const teamData of fixtureData.response) {
-    //     const apiFootballId = teamData.team.id
-    //     const team = await Team.findByOrFail('api_football_id', apiFootballId)
-    //     for (const stats of teamData.statistics) {
-    //       let value = 0
-    //       if (typeof stats.value === 'string') value = parseInt(stats.value)
-    //       if (typeof stats.value === 'number') value = stats.value
-    //       const statType = await StatType.findByOrFail('name', stats.type)
-    //       const exist = await Stat.query()
-    //         .where('match_id', match.id)
-    //         .andWhere('team_id', team.id)
-    //         .andWhere('stat_type_id', statType.id)
-    //         .andWhere('period', 'total')
-    //         .first()
-    //       if (!exist) {
-    //         const newStats = new Stat()
-    //         newStats.merge({
-    //           matchId: match.id,
-    //           teamId: team.id,
-    //           statTypeId: statType.id,
-    //           period: 'total',
-    //           value,
-    //         })
-    //         statsArray.push(newStats)
-    //       }
-    //     }
-    //   }
-    // }
-    // console.log('data: ', statsArray.length)
-    // await Stat.createMany(statsArray)
-    // console.log(`round ${roundOrder} done.`)
+    // await ApiFootballService.loadStatsByRound(roundOrder, leagueId)
   }
 }
