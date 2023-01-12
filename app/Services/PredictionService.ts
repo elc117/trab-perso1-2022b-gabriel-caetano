@@ -6,7 +6,7 @@ import { DateTime } from 'luxon'
 
 class PredictionService {
   private getLastRoundEnd() {
-    const today = DateTime.now().plus({ days: 3 })
+    const today = DateTime.now()
     const { weekday } = today
     if (weekday === 2 || weekday === 5) return today
     else if (weekday > 2 && weekday < 5) {
