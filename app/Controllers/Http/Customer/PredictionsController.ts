@@ -2,7 +2,6 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Customer from 'App/Models/Customer'
 import League from 'App/Models/League'
 import Match from 'App/Models/Match'
-import Round from 'App/Models/Round'
 import StatType from 'App/Models/StatType'
 import Team from 'App/Models/Team'
 import PredictionService from 'App/Services/PredictionService'
@@ -15,8 +14,7 @@ export default class PredictionController {
     )
     const customer = await Customer.findOrFail(auth.user!.id)
     const { active } = customer
-    const roundOrder = await PredictionService.getCurrentRound(leagueId)
-    const round = await Round.findByOrFail('order', roundOrder)
+    const round = await PredictionService.getCurrentRound(leagueId)
     const league = await League.findOrFail(leagueId)
     const stat = await StatType.findOrFail(statType)
 
@@ -62,7 +60,7 @@ export default class PredictionController {
     return {
       leagueId,
       leagueName: league.name,
-      roundOrder,
+      roundOrder: round.order,
       roundName: round.name,
       statType: stat.name,
       betValue,

@@ -22,7 +22,7 @@ class PredictionService {
     }
   }
 
-  public async getCurrentRound(leagueId: number) {
+  public async getLastRound(leagueId: number) {
     let lastEnd = this.getLastRoundEnd()
 
     const season = await Season.query()
@@ -39,7 +39,45 @@ class PredictionService {
       .where('m.date', '<', lastEnd.toISODate())
       .orderBy('order', 'desc')
       .firstOrFail()
-    return lastRound.order + 1
+    return lastRound
+  }
+
+  private getNextRoundEnd() {
+    const today = DateTime.now()
+    const { weekday } = today
+    if (weekday === 2) return today.plus({ days: 3 })
+    else if (weekday === 5) return today.plus({ days: 4 })
+    else if (weekday > 2 && weekday < 5) {
+      const diff = 5 - weekday
+      return today.plus({ days: diff })
+    } else if (weekday < 2) {
+      const diff = 2 - weekday
+      return today.plus({ days: diff })
+    } else {
+      // weekday = 6
+      const diff = 3
+      return today.plus({ days: diff })
+    }
+  }
+
+  public async getCurrentRound(leagueId: number) {
+    let nextEnd = this.getNextRoundEnd()
+    const season = await Season.query()
+      .select('id')
+      .where('league_id', leagueId)
+      .andWhere('start_date', '<', nextEnd.toISODate())
+      .andWhere('end_date', '>', nextEnd.toISODate())
+      .firstOrFail()
+
+    const currentRound = await Round.query()
+      .select(['rounds.*', 'm.round_id'])
+      .leftJoin('matches as m', 'm.round_id', 'rounds.id')
+      .where('season_id', season.id)
+      .where('m.date', '<', nextEnd.toISODate())
+      .orderBy('order', 'desc')
+      .firstOrFail()
+
+    return currentRound
   }
 
   private async getMatchesByRound(roundId: number) {
@@ -53,7 +91,7 @@ class PredictionService {
     underOver: string
   ) {
     const round = await this.getCurrentRound(leagueId)
-    const matches = await this.getMatchesByRound(round)
+    const matches = await this.getMatchesByRound(round.id)
     const predictions = await Prediction.query()
       .whereIn(
         'match_id',
@@ -182,8 +220,8 @@ class PredictionService {
     underOver: string
   ) {
     try {
-      const currentRound = await this.getCurrentRound(leagueId)
-      const matches = await this.getMatchesByRound(currentRound)
+      const round = await this.getCurrentRound(leagueId)
+      const matches = await this.getMatchesByRound(round.id)
       const predictions: Prediction[] = []
       for (const match of matches) {
         const exist = await this.checkOldPrediction(match.id, betValue, betType, underOver)
